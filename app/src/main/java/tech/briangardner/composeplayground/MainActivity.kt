@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
+import androidx.compose.unaryPlus
 import androidx.ui.core.Text
 import androidx.ui.core.dp
 import androidx.ui.core.setContent
 import androidx.ui.core.sp
+import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
-import androidx.ui.layout.Column
-import androidx.ui.layout.Row
-import androidx.ui.layout.Spacing
+import androidx.ui.graphics.vector.DrawVector
+import androidx.ui.layout.*
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.res.imageResource
+import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
 import androidx.ui.tooling.preview.Preview
@@ -107,7 +109,9 @@ fun TweetContent(content: String) {
 @Composable
 fun ActionRow() {
     Row(
-        modifier = Spacing(8.dp)
+        modifier = Spacing(8.dp),
+        mainAxisSize = LayoutSize.Expand,
+        mainAxisAlignment = MainAxisAlignment.SpaceAround
     ) {
         Comment()
         Retweet()
@@ -118,26 +122,57 @@ fun ActionRow() {
 
 @Composable
 fun Comment() {
-    val icon = imageResource(R.drawable.ic_comment)
-    Button("Comment")
+    val icon = +vectorResource(R.drawable.ic_comment)
+    Container(
+        expanded = true,
+        height = 24.dp,
+        width = 24.dp
+    ) {
+        DrawVector(
+            vectorImage = icon,
+            tintColor = Color.LightGray
+        )
+    }
 }
 
 @Composable
 fun Retweet() {
-    val icon = imageResource(R.drawable.ic_retweet)
-    Button("Retweet")
-}
+    val icon = +vectorResource(R.drawable.ic_retweet)
+    Container(
+        expanded = true,
+        height = 24.dp,
+        width = 24.dp
+    ) {
+        DrawVector(
+            vectorImage = icon,
+            tintColor = Color.LightGray
+        )    }}
 
 @Composable
 fun Like() {
-    Button("Like")
-}
+    val icon = +vectorResource(R.drawable.ic_like)
+    Container(
+        expanded = true,
+        height = 24.dp,
+        width = 24.dp
+    ) {
+        DrawVector(
+            vectorImage = icon,
+            tintColor = Color.LightGray
+        )    }}
 
 @Composable
 fun Share() {
-    val icon = imageResource(R.drawable.ic_share)
-    Button("Share")
-}
+    val icon = +vectorResource(R.drawable.ic_share)
+    Container(
+        expanded = true,
+        height = 24.dp,
+        width = 24.dp
+    ) {
+        DrawVector(
+            vectorImage = icon,
+            tintColor = Color.LightGray
+        )    }}
 // endregion
 
 @Preview
