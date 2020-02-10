@@ -65,7 +65,9 @@ fun PostTime(time: Long) {
 
 @Composable
 fun UserInfoRow(name: String, handle: String, time: Long) {
-    Row {
+    Row(
+        modifier = Spacing(8.dp)
+    ) {
         DisplayName(name)
         Handle(handle)
         PostTime(time)
