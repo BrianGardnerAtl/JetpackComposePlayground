@@ -8,8 +8,10 @@ import androidx.ui.core.dp
 import androidx.ui.core.setContent
 import androidx.ui.core.sp
 import androidx.ui.graphics.Color
+import androidx.ui.layout.Column
 import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
+import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
@@ -23,6 +25,26 @@ class MainActivity : AppCompatActivity() {
                 UserInfoRow("Brian Gardner", "@BrianGardnerDev", 1)
             }
         }
+    }
+}
+
+@Composable
+fun Tweet() {
+    Column {
+        UserInfoRow(name = "Brian Gardner", handle = "@BrianGardnerDev", time = 1)
+        TweetContent(content = "This is a test tweet to see how things get rendered in the preview")
+    }
+}
+
+// region information about the user's profile
+@Composable
+fun UserInfoRow(name: String, handle: String, time: Long) {
+    Row(
+        modifier = Spacing(8.dp)
+    ) {
+        DisplayName(name)
+        Handle(handle)
+        PostTime(time)
     }
 }
 
@@ -62,22 +84,26 @@ fun PostTime(time: Long) {
         )
     )
 }
+// endregion
 
+// region tweet contents
 @Composable
-fun UserInfoRow(name: String, handle: String, time: Long) {
-    Row(
+fun TweetContent(content: String) {
+    return Text(
+        text = content,
+        style = TextStyle(
+            color = Color.Black, // TODO update this with an appropriate theme color
+            fontSize = 12.sp
+        ),
         modifier = Spacing(8.dp)
-    ) {
-        DisplayName(name)
-        Handle(handle)
-        PostTime(time)
-    }
+    )
 }
+// endregion
 
 @Preview
 @Composable
 fun TwitterPreview() {
     MaterialTheme {
-        UserInfoRow("Brian Gardner", "@BrianGardnerDev", 1)
+        Tweet()
     }
 }
