@@ -33,6 +33,7 @@ fun Tweet() {
     Column {
         UserInfoRow(name = "Brian Gardner", handle = "@BrianGardnerDev", time = 1)
         TweetContent(content = "This is a test tweet to see how things get rendered in the preview")
+        ActionRow()
     }
 }
 
@@ -97,6 +98,40 @@ fun TweetContent(content: String) {
         ),
         modifier = Spacing(8.dp)
     )
+}
+// endregion
+
+// region actions row
+@Composable
+fun ActionRow() {
+    Row(
+        modifier = Spacing(8.dp)
+    ) {
+        Comment()
+        Retweet()
+        Like()
+        Share()
+    }
+}
+
+@Composable
+fun Comment() {
+    Button("Comment")
+}
+
+@Composable
+fun Retweet() {
+    Button("Retweet")
+}
+
+@Composable
+fun Like() {
+    Button("Like")
+}
+
+@Composable
+fun Share() {
+    Button("Share")
 }
 // endregion
 
