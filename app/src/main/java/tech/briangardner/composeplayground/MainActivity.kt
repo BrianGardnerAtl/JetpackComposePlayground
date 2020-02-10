@@ -1,6 +1,7 @@
 package tech.briangardner.composeplayground
 
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.ui.core.Text
@@ -13,6 +14,7 @@ import androidx.ui.layout.Row
 import androidx.ui.layout.Spacing
 import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
+import androidx.ui.res.imageResource
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
 import androidx.ui.tooling.preview.Preview
@@ -22,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                UserInfoRow("Brian Gardner", "@BrianGardnerDev", 1)
+                Tweet()
             }
         }
     }
@@ -116,11 +118,13 @@ fun ActionRow() {
 
 @Composable
 fun Comment() {
+    val icon = imageResource(R.drawable.ic_comment)
     Button("Comment")
 }
 
 @Composable
 fun Retweet() {
+    val icon = imageResource(R.drawable.ic_retweet)
     Button("Retweet")
 }
 
@@ -131,6 +135,7 @@ fun Like() {
 
 @Composable
 fun Share() {
+    val icon = imageResource(R.drawable.ic_share)
     Button("Share")
 }
 // endregion
