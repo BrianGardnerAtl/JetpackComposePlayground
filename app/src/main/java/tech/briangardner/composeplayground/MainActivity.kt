@@ -1,14 +1,16 @@
 package tech.briangardner.composeplayground
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
+import androidx.compose.ambient
 import androidx.compose.unaryPlus
-import androidx.ui.core.Text
-import androidx.ui.core.dp
-import androidx.ui.core.setContent
-import androidx.ui.core.sp
+import androidx.ui.core.*
+import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
@@ -108,71 +110,83 @@ fun TweetContent(content: String) {
 // region actions row
 @Composable
 fun ActionRow() {
+    val context = +ambient(ContextAmbient)
     Row(
         modifier = Spacing(8.dp),
         mainAxisSize = LayoutSize.Expand,
         mainAxisAlignment = MainAxisAlignment.SpaceAround
     ) {
-        Comment()
-        Retweet()
-        Like()
-        Share()
+        Comment(100) { Toast.makeText(context, "Clicked on comment", Toast.LENGTH_SHORT).show() }
+        Retweet(10){  Toast.makeText(context, "Clicked on retweet", Toast.LENGTH_SHORT).show() }
+        Like(1000) { Toast.makeText(context, "Clicked on like", Toast.LENGTH_SHORT).show() }
+        Share { Toast.makeText(context, "Clicked on share", Toast.LENGTH_SHORT).show() }
     }
 }
 
 @Composable
-fun Comment() {
-    val icon = +vectorResource(R.drawable.ic_comment)
-    Container(
-        expanded = true,
-        height = 24.dp,
-        width = 24.dp
+fun Comment(count: Int, onClick : (() -> Unit)) {
+    InteractionImage(iconId = R.drawable.ic_comment, count = count, onClick = onClick)
+}
+
+@Composable
+fun Retweet(count: Int, onClick : (() -> Unit)) {
+    InteractionImage(iconId = R.drawable.ic_retweet, count = count, onClick = onClick)
+}
+
+@Composable
+fun Like(count: Int, onClick : (() -> Unit)) {
+    InteractionImage(iconId = R.drawable.ic_like, count = count, onClick = onClick)
+}
+
+@Composable
+fun InteractionImage(
+    @DrawableRes iconId: Int,
+    count: Int,
+    onClick : (() -> Unit)
     ) {
-        DrawVector(
-            vectorImage = icon,
-            tintColor = Color.LightGray
-        )
+    val icon = +vectorResource(iconId)
+    Clickable(onClick = onClick) {
+        Row {
+            Container(
+                expanded = true,
+                height = 24.dp,
+                width = 24.dp
+            ) {
+                DrawVector(
+                    vectorImage = icon,
+                    tintColor = Color.LightGray
+                )
+            }
+            if (count > 0) {
+                Text(
+                    "$count",
+                    modifier = Spacing(8.dp, 0.dp, 0.dp, 0.dp),
+                    style = TextStyle(
+                        color = Color.LightGray,
+                        fontSize = 18.sp
+                    )
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun Retweet() {
-    val icon = +vectorResource(R.drawable.ic_retweet)
-    Container(
-        expanded = true,
-        height = 24.dp,
-        width = 24.dp
-    ) {
-        DrawVector(
-            vectorImage = icon,
-            tintColor = Color.LightGray
-        )    }}
-
-@Composable
-fun Like() {
-    val icon = +vectorResource(R.drawable.ic_like)
-    Container(
-        expanded = true,
-        height = 24.dp,
-        width = 24.dp
-    ) {
-        DrawVector(
-            vectorImage = icon,
-            tintColor = Color.LightGray
-        )    }}
-
-@Composable
-fun Share() {
+fun Share(onClick : (() -> Unit)) {
     val icon = +vectorResource(R.drawable.ic_share)
-    Container(
-        expanded = true,
-        height = 24.dp,
-        width = 24.dp
-    ) {
-        DrawVector(
-            vectorImage = icon,
-            tintColor = Color.LightGray
-        )    }}
+    Clickable(onClick = onClick) {
+        Container(
+            expanded = true,
+            height = 24.dp,
+            width = 24.dp
+        ) {
+            DrawVector(
+                vectorImage = icon,
+                tintColor = Color.LightGray
+            )
+        }
+    }
+}
 // endregion
 
 @Preview
