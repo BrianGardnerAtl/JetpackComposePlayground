@@ -1,8 +1,6 @@
 package tech.briangardner.composeplayground
 
-import android.content.Context
 import android.os.Bundle
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
@@ -11,13 +9,10 @@ import androidx.compose.ambient
 import androidx.compose.unaryPlus
 import androidx.ui.core.*
 import androidx.ui.foundation.Clickable
-import androidx.ui.foundation.DrawImage
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
-import androidx.ui.material.Button
 import androidx.ui.material.MaterialTheme
-import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
@@ -26,20 +21,48 @@ import androidx.ui.tooling.preview.Preview
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val tweet = Tweet(
+            displayName = "Brian Gardner",
+            handle = "@BrianGardnerDev",
+            time = 1,
+            content = "This is a test tweet to see how things get rendered in the preview",
+            commentCount = 100,
+            retweetCount = 10,
+            likeCount = 1000
+        )
         setContent {
             MaterialTheme {
-                Tweet()
+                TweetView(tweet)
             }
         }
     }
 }
 
+// State class for the Tweet data
+data class Tweet(
+    val displayName: String,
+    val handle: String,
+    val time: Long,
+    val content: String,
+    val commentCount: Int,
+    val retweetCount: Int,
+    val likeCount: Int
+)
+
 @Composable
-fun Tweet() {
+fun TweetView(tweet: Tweet) {
     Column {
-        UserInfoRow(name = "Brian Gardner", handle = "@BrianGardnerDev", time = 1)
-        TweetContent(content = "This is a test tweet to see how things get rendered in the preview")
-        ActionRow()
+        UserInfoRow(
+            name = tweet.displayName,
+            handle = tweet.handle,
+            time = tweet.time
+        )
+        TweetContent(content = tweet.content)
+        ActionRow(
+            commentCount = tweet.commentCount,
+            retweetCount = tweet.retweetCount,
+            likeCount = tweet.likeCount
+        )
     }
 }
 
@@ -109,16 +132,20 @@ fun TweetContent(content: String) {
 
 // region actions row
 @Composable
-fun ActionRow() {
+fun ActionRow(
+    commentCount: Int,
+    retweetCount: Int,
+    likeCount: Int
+) {
     val context = +ambient(ContextAmbient)
     Row(
         modifier = Spacing(8.dp),
         mainAxisSize = LayoutSize.Expand,
         mainAxisAlignment = MainAxisAlignment.SpaceAround
     ) {
-        Comment(100) { Toast.makeText(context, "Clicked on comment", Toast.LENGTH_SHORT).show() }
-        Retweet(10){  Toast.makeText(context, "Clicked on retweet", Toast.LENGTH_SHORT).show() }
-        Like(1000) { Toast.makeText(context, "Clicked on like", Toast.LENGTH_SHORT).show() }
+        Comment(commentCount) { Toast.makeText(context, "Clicked on comment", Toast.LENGTH_SHORT).show() }
+        Retweet(retweetCount){  Toast.makeText(context, "Clicked on retweet", Toast.LENGTH_SHORT).show() }
+        Like(likeCount) { Toast.makeText(context, "Clicked on like", Toast.LENGTH_SHORT).show() }
         Share { Toast.makeText(context, "Clicked on share", Toast.LENGTH_SHORT).show() }
     }
 }
@@ -192,7 +219,16 @@ fun Share(onClick : (() -> Unit)) {
 @Preview
 @Composable
 fun TwitterPreview() {
+    val tweet = Tweet(
+        displayName = "Brian Gardner",
+        handle = "@BrianGardnerDev",
+        time = 1,
+        content = "This is a test tweet to see how things get rendered in the preview",
+        commentCount = 100,
+        retweetCount = 10,
+        likeCount = 1000
+    )
     MaterialTheme {
-        Tweet()
+        TweetView(tweet)
     }
 }
