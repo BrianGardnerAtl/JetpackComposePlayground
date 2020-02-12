@@ -198,7 +198,7 @@ fun ActionRow(
 @Composable
 fun Comment(count: Int, commented: Boolean, onValueChange : ((Boolean) -> Unit)) {
     ToggleImage(
-        iconId = R.drawable.ic_retweet,
+        iconId = R.drawable.ic_comment,
         count = count,
         checked = commented,
         onValueChange = onValueChange,
