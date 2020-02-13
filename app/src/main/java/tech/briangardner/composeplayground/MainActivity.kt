@@ -27,7 +27,7 @@ import androidx.ui.unit.sp
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val tweet = Tweet(
+        val originalTweet = Tweet(
             displayName = "Brian Gardner",
             handle = "@BrianGardnerDev",
             time = 1,
@@ -38,27 +38,39 @@ class MainActivity : AppCompatActivity() {
             liked = false,
             likeCount = 1000
         )
+        // setup some mutable state so my tweet can be immutable!!!
+        val state = mutableStateOf(originalTweet, StructurallyEqual)
         // This works but how can I make the Tweet class immutable?
-        val retweetToggle: ((Boolean) -> Unit) = { state ->
-            tweet.retweeted = state
-            tweet.retweetCount = if (state) {
-                tweet.retweetCount + 1
+        val retweetToggle: ((Boolean) -> Unit) = { retweet ->
+            val oldTweet: Tweet = state.value
+            val retweetCount = if (retweet) {
+                oldTweet.retweetCount + 1
             } else {
-                tweet.retweetCount - 1
+                oldTweet.retweetCount - 1
             }
+            val tweet = oldTweet.copy(
+                retweeted = retweet,
+                retweetCount = retweetCount
+            )
+            state.value = tweet
         }
-        val likedToggle: ((Boolean) -> Unit) = { state ->
-            tweet.liked = state
-            tweet.likeCount = if (state) {
-                tweet.likeCount + 1
+        val likedToggle: ((Boolean) -> Unit) = { liked ->
+            val oldTweet: Tweet = state.value
+            val likeCount = if (liked) {
+                oldTweet.likeCount + 1
             } else {
-                tweet.likeCount - 1
+                oldTweet.likeCount - 1
             }
+            val tweet = oldTweet.copy(
+                liked = liked,
+                likeCount = likeCount
+            )
+            state.value = tweet
         }
         setContent {
             MaterialTheme {
                 TweetView(
-                    tweet,
+                    state,
                     retweetToggle,
                     likedToggle
                 )
@@ -75,18 +87,19 @@ data class Tweet(
     val time: Long,
     val content: String,
     val commentCount: Int,
-    var retweeted: Boolean,
-    var retweetCount: Int,
-    var liked: Boolean,
-    var likeCount: Int
+    val retweeted: Boolean,
+    val retweetCount: Int,
+    val liked: Boolean,
+    val likeCount: Int
 )
 
 @Composable
 fun TweetView(
-    tweet: Tweet,
+    state: MutableState<Tweet>,
     retweetToggle: ((Boolean) -> Unit),
     likeToggle: ((Boolean) -> Unit)
 ) {
+    val tweet: Tweet = state.value
     Row {
         ProfileImage()
         Column {
@@ -315,7 +328,7 @@ fun ProfileImage() {
 @Preview
 @Composable
 fun TwitterPreview() {
-    val tweet = Tweet(
+    val originalTweet = Tweet(
         displayName = "Brian Gardner",
         handle = "@BrianGardnerDev",
         time = 1,
@@ -326,15 +339,38 @@ fun TwitterPreview() {
         liked = false,
         likeCount = 1000
     )
-    val retweetToggle: ((Boolean) -> Unit) = { state ->
-        tweet.retweeted = state
+    // setup some mutable state so my tweet can be immutable!!!
+    val state = mutableStateOf(originalTweet, StructurallyEqual)
+    // This works but how can I make the Tweet class immutable?
+    val retweetToggle: ((Boolean) -> Unit) = { retweet ->
+        val oldTweet: Tweet = state.value
+        val retweetCount = if (retweet) {
+            oldTweet.retweetCount + 1
+        } else {
+            oldTweet.retweetCount - 1
+        }
+        val tweet = oldTweet.copy(
+            retweeted = retweet,
+            retweetCount = retweetCount
+        )
+        state.value = tweet
     }
-    val likedToggle: ((Boolean) -> Unit) = { state ->
-        tweet.liked = state
+    val likedToggle: ((Boolean) -> Unit) = { liked ->
+        val oldTweet: Tweet = state.value
+        val likeCount = if (liked) {
+            oldTweet.likeCount + 1
+        } else {
+            oldTweet.likeCount - 1
+        }
+        val tweet = oldTweet.copy(
+            liked = liked,
+            likeCount = likeCount
+        )
+        state.value = tweet
     }
     MaterialTheme {
         TweetView(
-            tweet,
+            state,
             retweetToggle,
             likedToggle
         )
