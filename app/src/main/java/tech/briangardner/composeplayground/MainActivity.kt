@@ -4,18 +4,19 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.Composable
-import androidx.compose.Model
-import androidx.compose.ambient
+import androidx.compose.*
+import androidx.ui.core.Clip
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
 import androidx.ui.core.setContent
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.selection.Toggleable
+import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.DrawVector
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
+import androidx.ui.material.surface.Surface
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
@@ -86,22 +87,25 @@ fun TweetView(
     retweetToggle: ((Boolean) -> Unit),
     likeToggle: ((Boolean) -> Unit)
 ) {
-    Column {
-        UserInfoRow(
-            name = tweet.displayName,
-            handle = tweet.handle,
-            time = tweet.time
-        )
-        TweetContent(content = tweet.content)
-        ActionRow(
-            commentCount = tweet.commentCount,
-            retweeted = tweet.retweeted,
-            retweetCount = tweet.retweetCount,
-            retweetToggle = retweetToggle,
-            liked = tweet.liked,
-            likeCount = tweet.likeCount,
-            likeToggle = likeToggle
-        )
+    Row {
+        ProfileImage()
+        Column {
+            UserInfoRow(
+                name = tweet.displayName,
+                handle = tweet.handle,
+                time = tweet.time
+            )
+            TweetContent(content = tweet.content)
+            ActionRow(
+                commentCount = tweet.commentCount,
+                retweeted = tweet.retweeted,
+                retweetCount = tweet.retweetCount,
+                retweetToggle = retweetToggle,
+                liked = tweet.liked,
+                likeCount = tweet.likeCount,
+                likeToggle = likeToggle
+            )
+        }
     }
 }
 
@@ -283,6 +287,29 @@ fun Share(onClick : (() -> Unit)) {
         }
     }
 }
+// endregion
+
+// region profile image
+@Composable
+fun ProfileImage() {
+    val defaultPhoto = vectorResource(id = R.drawable.ic_profile_photo_default)
+    Container(modifier = LayoutPadding(8.dp)) {
+        Clip(shape = CircleShape) {
+            Surface(color = Color.DarkGray) {
+                Container(
+                    expanded = true,
+                    height = 36.dp,
+                    width = 36.dp
+                ) {
+                    DrawVector(
+                        vectorImage = defaultPhoto
+                    )
+                }
+            }
+        }
+    }
+}
+
 // endregion
 
 @Preview
