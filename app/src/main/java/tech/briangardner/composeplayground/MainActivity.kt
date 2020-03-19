@@ -6,19 +6,19 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.*
-import androidx.ui.core.Clip
 import androidx.ui.core.ContextAmbient
 import androidx.ui.core.Text
+import androidx.ui.core.drawClip
 import androidx.ui.core.setContent
 import androidx.ui.foundation.AdapterList
 import androidx.ui.foundation.Clickable
 import androidx.ui.foundation.selection.Toggleable
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.vector.DrawVector
+import androidx.ui.graphics.vector.drawVector
 import androidx.ui.layout.*
 import androidx.ui.material.MaterialTheme
-import androidx.ui.material.surface.Surface
+import androidx.ui.material.Surface
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
 import androidx.ui.text.font.FontWeight
@@ -237,12 +237,10 @@ fun Comment(count: Int, onClick : (() -> Unit)) {
         Row {
             Container(
                 height = 24.dp,
-                width = 24.dp
+                width = 24.dp,
+                modifier = drawVector(vectorImage = icon, tintColor = Color.LightGray)
             ) {
-                DrawVector(
-                    vectorImage = icon,
-                    tintColor = Color.LightGray
-                )
+
             }
             if (count > 0) {
                 Text(
@@ -299,12 +297,10 @@ fun ToggleImage(
             Container(
                 expanded = true,
                 height = 24.dp,
-                width = 24.dp
+                width = 24.dp,
+                modifier = drawVector(vectorImage = icon, tintColor = Color.LightGray)
             ) {
-                DrawVector(
-                    vectorImage = icon,
-                    tintColor = color
-                )
+
             }
             if (count > 0) {
                 Text(
@@ -327,12 +323,10 @@ fun Share(onClick : (() -> Unit)) {
         Container(
             expanded = true,
             height = 24.dp,
-            width = 24.dp
+            width = 24.dp,
+            modifier = drawVector(vectorImage = icon, tintColor = Color.LightGray)
         ) {
-            DrawVector(
-                vectorImage = icon,
-                tintColor = Color.LightGray
-            )
+
         }
     }
 }
@@ -343,16 +337,16 @@ fun Share(onClick : (() -> Unit)) {
 fun ProfileImage() {
     val defaultPhoto = vectorResource(id = R.drawable.ic_profile_photo_default)
     Container(modifier = LayoutPadding(8.dp)) {
-        Clip(shape = CircleShape) {
-            Surface(color = Color.DarkGray) {
-                Container(
-                    height = 36.dp,
-                    width = 36.dp
-                ) {
-                    DrawVector(
-                        vectorImage = defaultPhoto
-                    )
-                }
+        Surface(
+            color = Color.DarkGray,
+            modifier = drawClip(shape = CircleShape)
+        ) {
+            Container(
+                height = 36.dp,
+                width = 36.dp,
+                modifier = drawVector(vectorImage = defaultPhoto, tintColor = Color.LightGray)
+            ) {
+
             }
         }
     }
