@@ -16,6 +16,7 @@ import androidx.ui.graphics.Color
 import androidx.ui.graphics.vector.drawVector
 import androidx.ui.layout.*
 import androidx.ui.material.*
+import androidx.ui.material.ripple.Ripple
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val state = mutableStateOf(tweetList, StructurallyEqual)
         setContent {
             MaterialTheme {
-                ListScreen(state = state)
+                ListScreen(state)
             }
         }
     }
@@ -53,32 +54,55 @@ data class Tweet(
 @Composable
 fun ListScreen(state: MutableState<MutableList<Tweet>>) {
     Column {
-        TopAppBar(
-            title = {
-                Text("Tweetish")
-            },
-            actions = {
-                IconButton(onClick = {}) {
-                    Icon(icon = vectorResource(id = R.drawable.ic_add_vector))
-                }
-            },
-            navigationIcon = {
-                IconButton(onClick = {}) {
-                    Icon(icon = vectorResource(id = R.drawable.ic_nav_drawer))
-                }
-            }
-        )
+        TweetBar()
         TweetList(state)
-    }
-    Box(
-        modifier = LayoutHeight.Fill + LayoutWidth.Fill,
-        gravity = ContentGravity.BottomEnd,
-        padding = 16.dp
-    ) {
-        AddTweetButton()
     }
 }
 
+@Composable
+fun TweetBar() {
+    TopAppBar(
+        title = {
+            Text("Tweetish")
+        },
+        navigationIcon = {
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_nav_drawer))
+            }
+        },
+        actions = {
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+            IconButton(onClick = {}) {
+                Icon(icon = vectorResource(id = R.drawable.ic_add))
+            }
+        }
+    )
+}
+
+// region tweet list
 @Composable
 fun TweetList(state: MutableState<MutableList<Tweet>>) {
     val list = state.value
@@ -129,7 +153,9 @@ fun TweetList(state: MutableState<MutableList<Tweet>>) {
         )
     }
 }
+// endregion
 
+// region single tweet view
 @Composable
 fun TweetView(
     tweet: Tweet,
@@ -159,6 +185,7 @@ fun TweetView(
         }
     }
 }
+// endregion
 
 // region user info row
 @Composable
@@ -251,50 +278,54 @@ fun ActionRow(
 
 @Composable
 fun Comment(count: Int, onClick : () -> Unit) {
-    Clickable(onClick = onClick) {
-        val icon = vectorResource(R.drawable.ic_comment)
-        Row {
-            Container(
-                height = 24.dp,
-                width = 24.dp,
-                modifier = drawVector(vectorImage = icon, tintColor = Color.LightGray)
-            ) {
-
-            }
-            if (count > 0) {
-                Text(
-                    text = "$count",
-                    modifier = LayoutPadding(8.dp, 0.dp, 0.dp, 0.dp),
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        color = Color.LightGray
-                    )
+    Ripple(bounded = false) {
+        Clickable(onClick = onClick) {
+            val icon = vectorResource(R.drawable.ic_comment)
+            Row {
+                Icon(
+                    icon = icon,
+                    modifier = LayoutSize(24.dp, 24.dp),
+                    tint = Color.LightGray
                 )
+                if (count > 0) {
+                    Text(
+                        text = "$count",
+                        modifier = LayoutPadding(8.dp, 0.dp, 0.dp, 0.dp),
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.LightGray
+                        )
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun Retweet(count: Int, retweeted: Boolean, onRetweetChanged : (Boolean) -> Unit) {
-    ToggleImage(
-        iconId = R.drawable.ic_retweet,
-        count = count,
-        checked = retweeted,
-        selectedColor = Color.Green,
-        onValueChange = onRetweetChanged
-    )
+fun Retweet(count: Int, retweeted: Boolean, onValueChange: (Boolean) -> Unit) {
+    Ripple(bounded = false) {
+        ToggleImage(
+            iconId = R.drawable.ic_retweet,
+            count = count,
+            checked = retweeted,
+            selectedColor = Color.Green,
+            onValueChange = onValueChange
+        )
+    }
 }
 
 @Composable
-fun Like(count: Int, liked: Boolean, onLikeChanged : (Boolean) -> Unit) {
-    ToggleImage(
-        iconId = R.drawable.ic_like,
-        count = count,
-        checked = liked,
-        selectedColor = Color.Red,
-        onValueChange = onLikeChanged
-    )
+fun Like(count: Int, liked: Boolean, onValueChange: (Boolean) -> Unit) {
+    Ripple(bounded = false) {
+        ToggleImage(
+            iconId = R.drawable.ic_retweet,
+            count = count,
+            checked = liked,
+            selectedColor = Color.Red,
+            onValueChange = onValueChange
+        )
+    }
 }
 
 @Composable
@@ -313,13 +344,11 @@ fun ToggleImage(
     }
     Toggleable(value = checked, onValueChange = onValueChange) {
         Row {
-            Container(
-                height = 24.dp,
-                width = 24.dp,
-                modifier = drawVector(vectorImage = icon, tintColor = Color.LightGray)
-            ) {
-
-            }
+            Icon(
+                icon = icon,
+                modifier = LayoutSize(24.dp, 24.dp),
+                tint = color
+            )
             if (count > 0) {
                 Text(
                     text = "$count",
@@ -336,15 +365,16 @@ fun ToggleImage(
 
 @Composable
 fun Share(onClick : () -> Unit) {
-    Clickable(onClick = onClick) {
-        val icon = vectorResource(R.drawable.ic_share)
-        Container(
-            height = 24.dp,
-            width = 24.dp,
-            modifier = drawVector(vectorImage = icon, tintColor = Color.LightGray)
-        ) {
-
-        }
+    val icon = vectorResource(R.drawable.ic_share)
+    IconButton(
+        onClick = onClick,
+        modifier = LayoutSize(24.dp, 24.dp)
+    ) {
+        Icon(
+            icon = icon,
+            modifier = LayoutSize(24.dp, 24.dp),
+            tint = Color.LightGray
+        )
     }
 }
 // endregion
@@ -353,36 +383,34 @@ fun Share(onClick : () -> Unit) {
 @Composable
 fun ProfileImage() {
     val defaultPhoto = vectorResource(id = R.drawable.ic_profile_photo_default)
-    Container(modifier = LayoutPadding(8.dp)) {
+    Box(modifier = LayoutPadding(8.dp)) {
         Surface(
             color = Color.DarkGray,
             modifier = drawClip(shape = CircleShape)
         ) {
-            Container(
-                height = 36.dp,
-                width = 36.dp,
-                modifier = drawVector(vectorImage = defaultPhoto)
-            ) {
-
-            }
+            Icon(
+                icon = defaultPhoto,
+                modifier = LayoutSize(36.dp, 36.dp),
+                tint = Color.LightGray
+            )
         }
     }
 }
 // endregion
 
 // region add tweet
-@Composable
-fun AddTweetButton() {
-    val icon = imageResource(R.drawable.ic_add)
-    val context = ContextAmbient.current
-    FloatingActionButton(
-        icon = icon,
-        onClick = {
-            Toast.makeText(context, "Clicked on FAB", Toast.LENGTH_SHORT).show()
-        },
-        modifier = LayoutSize(48.dp, 48.dp)
-    )
-}
+//@Composable
+//fun AddTweetButton() {
+//    val icon = imageResource(R.drawable.ic_add)
+//    val context = ContextAmbient.current
+//    FloatingActionButton(
+//        icon = icon,
+//        onClick = {
+//            Toast.makeText(context, "Clicked on FAB", Toast.LENGTH_SHORT).show()
+//        },
+//        modifier = LayoutSize(48.dp, 48.dp)
+//    )
+//}
 // endregion
 
 // region preview functions
@@ -432,10 +460,16 @@ fun TweetListPreview() {
     TweetList(state = state)
 }
 
+//@Preview
+//@Composable
+//fun AddTweetPreview() {
+//    AddTweetButton()
+//}
+
 @Preview
 @Composable
-fun AddTweetPreview() {
-    AddTweetButton()
+fun TweetBarPreview() {
+    TweetBar()
 }
 // endregion
 
