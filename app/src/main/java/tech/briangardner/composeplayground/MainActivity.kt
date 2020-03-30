@@ -53,9 +53,30 @@ data class Tweet(
 
 @Composable
 fun ListScreen(state: MutableState<MutableList<Tweet>>) {
-    Column {
-        TweetBar()
-        TweetList(state)
+    ModalDrawerLayout(
+        drawerState = DrawerState.Closed,
+        onStateChange = { state -> },
+        drawerContent = { TweetNavigation() }
+    ) {
+        Column {
+            TweetBar()
+            TweetList(state)
+        }
+    }
+}
+
+@Composable
+fun TweetNavigation() {
+    Column(
+        modifier = LayoutWidth.Fill + LayoutHeight.Fill
+    ) {
+        Text("Profile")
+        Text("Lists")
+        Text("Topics")
+        Text("Bookmarks")
+        Text("Moments")
+        Text("Settings and privacy")
+        Text("Help center")
     }
 }
 
