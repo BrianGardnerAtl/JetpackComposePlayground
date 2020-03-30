@@ -53,13 +53,20 @@ data class Tweet(
 
 @Composable
 fun ListScreen(state: MutableState<MutableList<Tweet>>) {
+    val (drawerState, onDrawerStateChange) = state { DrawerState.Closed }
     ModalDrawerLayout(
-        drawerState = DrawerState.Closed,
-        onStateChange = { state -> },
+        drawerState = drawerState,
+        onStateChange = onDrawerStateChange,
         drawerContent = { TweetNavigation() }
     ) {
         Column {
-            TweetBar()
+            TweetBar {
+                if (drawerState == DrawerState.Closed) {
+                    onDrawerStateChange(DrawerState.Opened)
+                } else {
+                    onDrawerStateChange(DrawerState.Closed)
+                }
+            }
             TweetList(state)
         }
     }
@@ -81,13 +88,13 @@ fun TweetNavigation() {
 }
 
 @Composable
-fun TweetBar() {
+fun TweetBar(navIconClick: () -> Unit) {
     TopAppBar(
         title = {
             Text("Tweetish")
         },
         navigationIcon = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = navIconClick) {
                 Icon(icon = vectorResource(id = R.drawable.ic_nav_drawer))
             }
         },
@@ -466,7 +473,8 @@ fun TweetListPreview() {
 @Preview
 @Composable
 fun TweetBarPreview() {
-    TweetBar()
+    TweetBar {
+    }
 }
 // endregion
 
