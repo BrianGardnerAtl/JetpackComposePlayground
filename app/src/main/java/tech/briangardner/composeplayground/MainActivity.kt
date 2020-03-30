@@ -74,30 +74,6 @@ fun TweetBar() {
             IconButton(onClick = {}) {
                 Icon(icon = vectorResource(id = R.drawable.ic_add))
             }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
-            }
         }
     )
 }
