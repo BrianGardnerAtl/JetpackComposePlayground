@@ -53,23 +53,31 @@ data class Tweet(
 
 @Composable
 fun ListScreen(state: MutableState<MutableList<Tweet>>) {
-    val (drawerState, onDrawerStateChange) = state { DrawerState.Closed }
-    ModalDrawerLayout(
-        drawerState = drawerState,
-        onStateChange = onDrawerStateChange,
-        drawerContent = { TweetNavigation() }
-    ) {
-        Column {
+    val (scaffoldState, onScaffoldStateChange) = state {
+        ScaffoldState(
+            drawerState = DrawerState.Closed,
+            isDrawerGesturesEnabled = true
+        )
+    }
+
+    Scaffold(
+        scaffoldState = scaffoldState,
+        topAppBar = {
             TweetBar {
-                if (drawerState == DrawerState.Closed) {
-                    onDrawerStateChange(DrawerState.Opened)
+                if (scaffoldState.drawerState == DrawerState.Closed) {
+                    onScaffoldStateChange(ScaffoldState(DrawerState.Opened))
                 } else {
-                    onDrawerStateChange(DrawerState.Closed)
+                    onScaffoldStateChange(ScaffoldState(DrawerState.Closed))
                 }
             }
+        },
+        drawerContent = {
+            TweetNavigation()
+        },
+        bodyContent= {
             TweetList(state)
         }
-    }
+    )
 }
 
 @Composable
