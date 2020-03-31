@@ -71,6 +71,10 @@ fun ListScreen(state: MutableState<MutableList<Tweet>>) {
                 }
             }
         },
+        floatingActionButton = {
+            AddTweetButton()
+        },
+        floatingActionButtonPosition = Scaffold.FabPosition.End,
         drawerContent = {
             TweetNavigation()
         },
@@ -104,11 +108,6 @@ fun TweetBar(navIconClick: () -> Unit) {
         navigationIcon = {
             IconButton(onClick = navIconClick) {
                 Icon(icon = vectorResource(id = R.drawable.ic_nav_drawer))
-            }
-        },
-        actions = {
-            IconButton(onClick = {}) {
-                Icon(icon = vectorResource(id = R.drawable.ic_add))
             }
         }
     )
@@ -411,18 +410,18 @@ fun ProfileImage() {
 // endregion
 
 // region add tweet
-//@Composable
-//fun AddTweetButton() {
-//    val icon = imageResource(R.drawable.ic_add)
-//    val context = ContextAmbient.current
-//    FloatingActionButton(
-//        icon = icon,
-//        onClick = {
-//            Toast.makeText(context, "Clicked on FAB", Toast.LENGTH_SHORT).show()
-//        },
-//        modifier = LayoutSize(48.dp, 48.dp)
-//    )
-//}
+@Composable
+fun AddTweetButton() {
+    val icon = imageResource(R.drawable.ic_add)
+    val context = ContextAmbient.current
+    FloatingActionButton(
+        icon = icon,
+        onClick = {
+            Toast.makeText(context, "Clicked on FAB", Toast.LENGTH_SHORT).show()
+        },
+        modifier = LayoutSize(48.dp, 48.dp)
+    )
+}
 // endregion
 
 // region preview functions
@@ -472,11 +471,11 @@ fun TweetListPreview() {
     TweetList(state = state)
 }
 
-//@Preview
-//@Composable
-//fun AddTweetPreview() {
-//    AddTweetButton()
-//}
+@Preview
+@Composable
+fun AddTweetPreview() {
+    AddTweetButton()
+}
 
 @Preview
 @Composable
