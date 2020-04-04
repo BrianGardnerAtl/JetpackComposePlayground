@@ -83,7 +83,7 @@ fun ListScreen(state: MutableState<MutableList<Tweet>>) {
 @Composable
 fun TweetNavigation() {
     Column(
-        modifier = LayoutWidth.Fill + LayoutHeight.Fill
+        modifier = Modifier.fillMaxSize()
     ) {
         Text("Profile")
         Text("Lists")
@@ -198,7 +198,7 @@ fun TweetView(
 @Composable
 fun UserInfoRow(name: String, handle: String, time: String) {
     Row(
-        modifier = LayoutPadding(8.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         DisplayName(name = name)
         Handle(handle = handle)
@@ -210,7 +210,7 @@ fun UserInfoRow(name: String, handle: String, time: String) {
 fun DisplayName(name: String) {
     Text(
         text = name,
-        modifier = LayoutPadding(0.dp, 0.dp, 8.dp, 0.dp),
+        modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp),
         style = TextStyle(
             color = Color.Black, // TODO update this with an appropriate theme color
             fontSize = 12.sp,
@@ -223,7 +223,7 @@ fun DisplayName(name: String) {
 fun Handle(handle: String) {
     Text(
         text = handle,
-        modifier = LayoutPadding(0.dp, 0.dp, 8.dp, 0.dp),
+        modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp),
         style = TextStyle(
             color = Color.DarkGray, // TODO update this with an appropriate theme color
             fontSize = 12.sp
@@ -252,7 +252,7 @@ fun TweetContent(content: String) {
             color = Color.Black, // TODO update this with an appropriate theme color
             fontSize = 12.sp
         ),
-        modifier = LayoutPadding(8.dp)
+        modifier = Modifier.padding(8.dp)
     )
 }
 // endregion
@@ -271,7 +271,8 @@ fun ActionRow(
 ) {
     val context = ContextAmbient.current
     Row(
-        modifier = LayoutWidth.Fill + LayoutPadding(8.dp),
+        modifier = Modifier.fillMaxWidth()
+                           .padding(8.dp),
         arrangement = Arrangement.SpaceAround
     ) {
         Comment(commentCount, commentClick)
@@ -292,13 +293,13 @@ fun Comment(count: Int, onClick : () -> Unit) {
         Row {
             Icon(
                 asset = icon,
-                modifier = LayoutSize(24.dp, 24.dp),
+                modifier = Modifier.preferredSize(24.dp),
                 tint = Color.LightGray
             )
             if (count > 0) {
                 Text(
                     text = "$count",
-                    modifier = LayoutPadding(8.dp, 0.dp, 0.dp, 0.dp),
+                    modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.LightGray
@@ -353,13 +354,13 @@ fun ToggleImage(
         Row {
             Icon(
                 asset = icon,
-                modifier = LayoutSize(24.dp, 24.dp),
+                modifier = Modifier.preferredSize(24.dp),
                 tint = color
             )
             if (count > 0) {
                 Text(
                     text = "$count",
-                    modifier = LayoutPadding(8.dp, 0.dp, 0.dp, 0.dp),
+                    modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp),
                     style = TextStyle(
                         color = color,
                         fontSize = 18.sp
@@ -430,9 +431,9 @@ fun AddTweetButton() {
 fun TwitterPreview() {
     val commentClick: (() -> Unit) = {
     }
-    val retweetToggle: ((Boolean) -> Unit) = { retweet ->
+    val retweetToggle: ((Boolean) -> Unit) = { _ ->
     }
-    val likeToggle: ((Boolean) -> Unit) = { liked ->
+    val likeToggle: ((Boolean) -> Unit) = { _ ->
     }
     val tweet = Tweet(
         displayName = "Brian Gardner",
