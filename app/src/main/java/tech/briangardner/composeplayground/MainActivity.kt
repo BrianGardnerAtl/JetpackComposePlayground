@@ -5,18 +5,14 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.*
-import androidx.ui.core.ContextAmbient
-import androidx.ui.core.Text
-import androidx.ui.core.drawClip
-import androidx.ui.core.setContent
+import androidx.ui.core.*
 import androidx.ui.foundation.*
 import androidx.ui.foundation.selection.Toggleable
 import androidx.ui.foundation.shape.corner.CircleShape
 import androidx.ui.graphics.Color
-import androidx.ui.graphics.vector.drawVector
 import androidx.ui.layout.*
 import androidx.ui.material.*
-import androidx.ui.material.ripple.Ripple
+import androidx.ui.material.ripple.ripple
 import androidx.ui.res.imageResource
 import androidx.ui.res.vectorResource
 import androidx.ui.text.TextStyle
@@ -107,7 +103,7 @@ fun TweetBar(navIconClick: () -> Unit) {
         },
         navigationIcon = {
             IconButton(onClick = navIconClick) {
-                Icon(icon = vectorResource(id = R.drawable.ic_nav_drawer))
+                Icon(asset = vectorResource(id = R.drawable.ic_nav_drawer))
             }
         }
     )
@@ -289,25 +285,25 @@ fun ActionRow(
 
 @Composable
 fun Comment(count: Int, onClick : () -> Unit) {
-    Ripple(bounded = false) {
-        Clickable(onClick = onClick) {
-            val icon = vectorResource(R.drawable.ic_comment)
-            Row {
-                Icon(
-                    icon = icon,
-                    modifier = LayoutSize(24.dp, 24.dp),
-                    tint = Color.LightGray
-                )
-                if (count > 0) {
-                    Text(
-                        text = "$count",
-                        modifier = LayoutPadding(8.dp, 0.dp, 0.dp, 0.dp),
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            color = Color.LightGray
-                        )
+    Clickable(
+        onClick = onClick,
+        modifier = Modifier.ripple()) {
+        val icon = vectorResource(R.drawable.ic_comment)
+        Row {
+            Icon(
+                asset = icon,
+                modifier = LayoutSize(24.dp, 24.dp),
+                tint = Color.LightGray
+            )
+            if (count > 0) {
+                Text(
+                    text = "$count",
+                    modifier = LayoutPadding(8.dp, 0.dp, 0.dp, 0.dp),
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        color = Color.LightGray
                     )
-                }
+                )
             }
         }
     }
@@ -315,28 +311,24 @@ fun Comment(count: Int, onClick : () -> Unit) {
 
 @Composable
 fun Retweet(count: Int, retweeted: Boolean, onValueChange: (Boolean) -> Unit) {
-    Ripple(bounded = false) {
-        ToggleImage(
-            iconId = R.drawable.ic_retweet,
-            count = count,
-            checked = retweeted,
-            selectedColor = Color.Green,
-            onValueChange = onValueChange
-        )
-    }
+    ToggleImage(
+        iconId = R.drawable.ic_retweet,
+        count = count,
+        checked = retweeted,
+        selectedColor = Color.Green,
+        onValueChange = onValueChange
+    )
 }
 
 @Composable
 fun Like(count: Int, liked: Boolean, onValueChange: (Boolean) -> Unit) {
-    Ripple(bounded = false) {
-        ToggleImage(
-            iconId = R.drawable.ic_retweet,
-            count = count,
-            checked = liked,
-            selectedColor = Color.Red,
-            onValueChange = onValueChange
-        )
-    }
+    ToggleImage(
+        iconId = R.drawable.ic_like,
+        count = count,
+        checked = liked,
+        selectedColor = Color.Red,
+        onValueChange = onValueChange
+    )
 }
 
 @Composable
@@ -353,10 +345,14 @@ fun ToggleImage(
     } else {
         Color.LightGray
     }
-    Toggleable(value = checked, onValueChange = onValueChange) {
+    Toggleable(
+        value = checked,
+        onValueChange = onValueChange,
+        modifier = Modifier.ripple()
+    ) {
         Row {
             Icon(
-                icon = icon,
+                asset = icon,
                 modifier = LayoutSize(24.dp, 24.dp),
                 tint = color
             )
@@ -379,11 +375,11 @@ fun Share(onClick : () -> Unit) {
     val icon = vectorResource(R.drawable.ic_share)
     IconButton(
         onClick = onClick,
-        modifier = LayoutSize(24.dp, 24.dp)
+        modifier = Modifier.preferredSize(24.dp)
     ) {
         Icon(
-            icon = icon,
-            modifier = LayoutSize(24.dp, 24.dp),
+            asset = icon,
+            modifier = Modifier.preferredSize(24.dp),
             tint = Color.LightGray
         )
     }
@@ -394,14 +390,15 @@ fun Share(onClick : () -> Unit) {
 @Composable
 fun ProfileImage() {
     val defaultPhoto = vectorResource(id = R.drawable.ic_profile_photo_default)
-    Box(modifier = LayoutPadding(8.dp)) {
+    Box(modifier = Modifier.padding(8.dp)) {
         Surface(
             color = Color.DarkGray,
-            modifier = drawClip(shape = CircleShape)
+            // TODO see if the clip works with the padding now
+            modifier = Modifier.clip(shape = CircleShape)
         ) {
             Icon(
-                icon = defaultPhoto,
-                modifier = LayoutSize(36.dp, 36.dp),
+                asset = defaultPhoto,
+                modifier = Modifier.preferredSize(36.dp),
                 tint = Color.LightGray
             )
         }
@@ -415,12 +412,15 @@ fun AddTweetButton() {
     val icon = imageResource(R.drawable.ic_add)
     val context = ContextAmbient.current
     FloatingActionButton(
-        icon = icon,
         onClick = {
             Toast.makeText(context, "Clicked on FAB", Toast.LENGTH_SHORT).show()
-        },
-        modifier = LayoutSize(48.dp, 48.dp)
-    )
+        }
+    ) {
+        Icon(
+            asset = icon,
+            modifier = Modifier.preferredSize(48.dp)
+        )
+    }
 }
 // endregion
 
