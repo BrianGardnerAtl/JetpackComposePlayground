@@ -391,18 +391,16 @@ fun Share(onClick : () -> Unit) {
 @Composable
 fun ProfileImage() {
     val defaultPhoto = vectorResource(id = R.drawable.ic_profile_photo_default)
-    Box(modifier = Modifier.padding(8.dp)) {
-        Surface(
-            color = Color.DarkGray,
-            // TODO see if the clip works with the padding now
-            modifier = Modifier.clip(shape = CircleShape)
-        ) {
-            Icon(
-                asset = defaultPhoto,
-                modifier = Modifier.preferredSize(36.dp),
-                tint = Color.LightGray
-            )
-        }
+    Surface(
+        color = Color.DarkGray,
+        shape = CircleShape,
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Icon(
+            asset = defaultPhoto,
+            modifier = Modifier.preferredSize(36.dp),
+            tint = Color.LightGray
+        )
     }
 }
 // endregion
