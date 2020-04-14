@@ -56,6 +56,7 @@ fun ListScreen(state: MutableState<MutableList<Tweet>>) {
         )
     }
 
+    val context = ContextAmbient.current
     Scaffold(
         scaffoldState = scaffoldState,
         topAppBar = {
@@ -66,6 +67,23 @@ fun ListScreen(state: MutableState<MutableList<Tweet>>) {
                     onScaffoldStateChange(ScaffoldState(DrawerState.Closed))
                 }
             }
+        },
+        bottomAppBar = { fabConfiguration ->
+            TweetBottomBar(
+                fabConfiguration,
+                homeListener = {
+                    Toast.makeText(context, "Clicked on home", Toast.LENGTH_SHORT).show()
+                },
+                searchListener = {
+                    Toast.makeText(context, "Clicked on search", Toast.LENGTH_SHORT).show()
+                },
+                notificationListener = {
+                    Toast.makeText(context, "Clicked on notifications", Toast.LENGTH_SHORT).show()
+                },
+                messageListener = {
+                    Toast.makeText(context, "Clicked on messages", Toast.LENGTH_SHORT).show()
+                }
+            )
         },
         floatingActionButton = {
             AddTweetButton()
@@ -92,6 +110,54 @@ fun TweetNavigation() {
         Text("Moments")
         Text("Settings and privacy")
         Text("Help center")
+    }
+}
+
+@Composable
+fun TweetBottomBar(
+    fabConfiguration: BottomAppBar.FabConfiguration?,
+    homeListener: () -> Unit,
+    searchListener: () -> Unit,
+    notificationListener: () -> Unit,
+    messageListener: () -> Unit
+) {
+    BottomAppBar(
+        fabConfiguration = fabConfiguration,
+        cutoutShape = CircleShape
+    ) {
+        IconButton(
+            modifier = Modifier.weight(1f),
+            onClick = homeListener
+        ) {
+            Icon(
+                asset = vectorResource(id = R.drawable.ic_home)
+            )
+        }
+        IconButton(
+            modifier = Modifier.weight(1f),
+            onClick = searchListener
+        ) {            Icon(
+                asset = vectorResource(id = R.drawable.ic_search)
+            )
+        }
+        IconButton(
+            modifier = Modifier.weight(1f),
+            onClick = notificationListener
+        ) {            Icon(
+                asset = vectorResource(id = R.drawable.ic_notifications)
+            )
+        }
+        IconButton(
+            modifier = Modifier.weight(1f),
+            onClick = messageListener
+        ) {            Icon(
+                asset = vectorResource(id = R.drawable.ic_message)
+            )
+        }
+        // This box ensures that a FAB with an EndDocked position will not overlap the IconButtons
+//        Box(
+//            modifier = Modifier.weight(1f)
+//        )
     }
 }
 
