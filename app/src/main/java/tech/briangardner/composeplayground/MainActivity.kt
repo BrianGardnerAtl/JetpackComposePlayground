@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val tweetList = generateFakeTweetList()
         val state = mutableStateOf(tweetList, StructurallyEqual)
         setContent {
-            MaterialTheme {
+            TweetTheme {
                 ListScreen(state)
             }
         }
@@ -48,6 +48,23 @@ data class Tweet(
 )
 
 @Composable
+fun TweetTheme(children: @Composable() () -> Unit) {
+    val colors = lightColorPalette(
+        primary = Color(0xFF5C6BC0),
+        onPrimary = Color(0xFFFFFFFF),
+        primaryVariant = Color(0xFF8e99f3),
+        secondary = Color(0xFFF06292),
+        onSecondary = Color(0xFF000000),
+        secondaryVariant = Color(0xFFFF94C2),
+        surface = Color(0xFFFFFFFF),
+        onSurface = Color(0xFF000000),
+        error = Color(0xFFc62828),
+        onError = Color(0xFFFFFFFF)
+    )
+    MaterialTheme(colors = colors, children = children)
+}
+
+@Composable
 fun ListScreen(state: MutableState<MutableList<Tweet>>) {
     val (scaffoldState, onScaffoldStateChange) = state {
         ScaffoldState(
@@ -56,6 +73,7 @@ fun ListScreen(state: MutableState<MutableList<Tweet>>) {
         )
     }
 
+    val colors = MaterialTheme.colors
     val context = ContextAmbient.current
     Scaffold(
         scaffoldState = scaffoldState,
@@ -477,6 +495,7 @@ fun AddTweetButton() {
     val icon = imageResource(R.drawable.ic_add)
     val context = ContextAmbient.current
     FloatingActionButton(
+        backgroundColor = MaterialTheme.colors.secondary,
         onClick = {
             Toast.makeText(context, "Clicked on FAB", Toast.LENGTH_SHORT).show()
         }
